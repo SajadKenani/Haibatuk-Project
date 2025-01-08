@@ -1,18 +1,20 @@
 package handlers
 
 type Product struct {
-	ID            int    `json:"id,omitempty" db:"id,omitempty"`
-	Price         string `json:"price" db:"price"`
-	Size          string `json:"size" db:"size"`
-	Image         string `json:"image" db:"image"`
-	NameEn        string `json:"name_en" db:"name_en"`
-	BrandEn       string `json:"brand_en" db:"brand_en"`
-	TypeEn        string `json:"type_en" db:"type_en"`
-	DescriptionEn string `json:"description_en" db:"description_en"`
-	NameAr        string `json:"name_ar" db:"name_ar"`
-	BrandAr       string `json:"brand_ar" db:"brand_ar"`
-	TypeAr        string `json:"type_ar" db:"type_ar"`
-	DescriptionAr string `json:"description_ar" db:"description_ar"`
+	ID             int    `json:"id,omitempty" db:"id,omitempty"`
+	Price          string `json:"price" db:"price"`
+	Size           string `json:"size" db:"size"`
+	Image          string `json:"image" db:"image"`
+	NameEn         string `json:"name_en" db:"name_en"`
+	BrandEn        string `json:"brand_en" db:"brand_en"`
+	TypeEn         string `json:"type_en" db:"type_en"`
+	DescriptionEn  string `json:"description_en" db:"description_en"`
+	NameAr         string `json:"name_ar" db:"name_ar"`
+	BrandAr        string `json:"brand_ar" db:"brand_ar"`
+	TypeAr         string `json:"type_ar" db:"type_ar"`
+	DescriptionAr  string `json:"description_ar" db:"description_ar"`
+	Department     string `json:"department" db:"department"`
+	SubDepartment string `json:"sub_department" db:"sub_department"`
 }
 
 type Department struct {
@@ -29,7 +31,7 @@ type SubDepartment struct {
 }
 
 type Submit struct {
-	Name string `json:"name" db:"name"`
-	Email string `json:"email" db:"email"`
+	Name    string `json:"name" db:"name"`
+	Email   string `json:"email" db:"email"`
 	Message string `json:"message" db:"message"`
 }

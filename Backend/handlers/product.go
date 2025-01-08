@@ -106,16 +106,19 @@ func HandleInsertion(ctx *gin.Context) {
 
 	// Insert the product into the database
 	_, err = db.DB.Exec(`
-        INSERT INTO product (
+    INSERT INTO product (
         price, size, image,
         name_en, description_en, brand_en, type_en,
-        name_ar, description_ar, brand_ar, type_ar) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-		product.Price, product.Size, imageData,
-		product.NameEn, product.DescriptionEn, product.BrandEn, product.TypeEn,
-		product.NameAr, product.DescriptionAr, product.BrandAr, product.TypeAr,
-	)
-
+        name_ar, description_ar, brand_ar, type_ar,
+        department, sub_department
+    ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
+    )`,
+    product.Price, product.Size, imageData,
+    product.NameEn, product.DescriptionEn, product.BrandEn, product.TypeEn,
+    product.NameAr, product.DescriptionAr, product.BrandAr, product.TypeAr,
+    product.Department, product.SubDepartment,
+)
 	if err != nil {
 		log.Printf("Error inserting product: %v", err) // Log the specific error
 		log.Println(product)
