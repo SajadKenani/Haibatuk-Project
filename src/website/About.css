@@ -1,0 +1,78 @@
+.about-page {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.8;
+    color: #333;
+    padding: 20px;
+    background: #f9f9f9;
+    margin: 0 auto;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: #004080;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.about-header h1 {
+    font-size: 2.8rem;
+    margin: 0;
+}
+
+.about-header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #004080;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: #0066cc;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.product-item {
+    background: #e6f7ff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}
