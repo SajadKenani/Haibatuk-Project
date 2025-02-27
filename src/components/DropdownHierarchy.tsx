@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../website/store";
 import { AllDepartments, ActiveFilters } from "../types";
@@ -12,136 +12,193 @@ interface DropdownHierarchyProps {
 }
 
 export const DropdownHierarchy: React.FC<DropdownHierarchyProps> = ({
-    allDepartments,
-    activeFilters,
-    setActiveFilters,
-    setIsMobileSidebarOpen,
-  }) => {
-    const [openDepartments, setOpenDepartments] = useState<{ [key: string]: boolean }>({});
-     const lang = localStorage.getItem("lang") ?
-      localStorage.getItem("lang")
-       : useSelector((state: RootState) => state.language)
-
-    const dropdown = useSelector((state: RootState) => state.dropdown);
-    const data = useSelector((state: RootState) => state.data)
-    // Function to toggle visibility of departments
-    const toggleVisibility = (id: string) => {
-      // Ensure the visibility state is updated based on the previous state
-      setOpenDepartments((prevState) => ({
-        ...prevState,
-        [id]: !prevState[id], // Toggle the current state of the given department
-      }));
-    };
+  allDepartments,
+  activeFilters,
+  setActiveFilters,
+  setIsMobileSidebarOpen,
+}) => {
+  const [openDepartments, setOpenDepartments] = useState<{ [key: string]: boolean }>({});
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   
-    // Handle department selection for active filters
-    const handleDepartmentSelection = (level: 'main' | 'sub' | 'nested', name: string) => {
-      setActiveFilters((prev) => {
-        const newFilters: ActiveFilters = {};
-        
-        if (level === 'main') {
-          newFilters.mainDepartment = name;
-        } else if (level === 'sub') {
-          newFilters.subDepartment = name;
-        } else {
-          newFilters.nestedDepartment = name;
-        }
-        
-        return { ...newFilters, sort: prev.sort };
-      });
-      setIsMobileSidebarOpen(dropdown);
-
-      localStorage.removeItem("selectedDepartment")
+  // Properly handle localStorage with a fallback to Redux state
+  const language = useSelector((state: RootState) => state.language);
+  const lang = localStorage.getItem("lang") || language;
   
-    };
+  const data = useSelector((state: RootState) => state.data);
   
-    // Log updated state of openDepartments for debugging
-    useEffect(() => {
-   
-      console.log('Updated openDepartments state:', openDepartments);
-    }, [openDepartments]);
+  // Function to toggle visibility of departments
+  const toggleVisibility = (id: string) => {
+    setOpenDepartments((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
 
-    useEffect(() => {
-      const timeout = setTimeout(() => {
-        if (allDepartments?.length > 0) {
-          if (localStorage.getItem("selectedDepartment")){
-          handleDepartmentSelection('main', String(localStorage.getItem("selectedDepartment")))
-        }
-        }
-      }, 100); 
+  // Handle department selection for active filters - using useCallback to ensure stability
+  const handleDepartmentSelection = useCallback((level: 'main' | 'sub' | 'nested', name: string, fromLocalStorage = false) => {
+    // Update active filters
+    setActiveFilters((prev) => {
+      // Create a completely new filter object to ensure React detects the change
+      const newFilters: ActiveFilters = { ...prev, sort: prev.sort };
+      
+      if (level === 'main') {
+        newFilters.mainDepartment = name;
+        // Clear sub and nested when main changes
+        delete newFilters.subDepartment;
+        delete newFilters.nestedDepartment;
+      } else if (level === 'sub') {
+        // Keep main department
+        newFilters.mainDepartment = prev.mainDepartment;
+        newFilters.subDepartment = name;
+        // Clear nested when sub changes
+        delete newFilters.nestedDepartment;
+      } else {
+        // Keep main and sub departments
+        newFilters.mainDepartment = prev.mainDepartment;
+        newFilters.subDepartment = prev.subDepartment;
+        newFilters.nestedDepartment = name;
+      }
+      
+      return newFilters;
+    });
     
-      return () => clearTimeout(timeout); 
-    }, [data]);
+    // Close mobile sidebar when selection is made
+    setIsMobileSidebarOpen(false);
+
+    // Update localStorage based on level, but not if loading from localStorage
+    if (!fromLocalStorage) {
+      if (level === 'main') {
+        localStorage.setItem("selectedDepartment", name);
+      } else {
+        localStorage.removeItem("selectedDepartment");
+      }
+    }
     
+    // Optionally, dispatch an action to update filters in Redux if needed
+    // This assumes you have an action creator called updateFilters
+    // dispatch(updateFilters({ level, name }));
+    
+    // Force a re-render of data if needed via a custom action
+    // dispatch({ type: 'FORCE_DATA_REFETCH' });
+  }, [setActiveFilters, setIsMobileSidebarOpen]);
+
+  // Load from localStorage only once on initial mount
+  useEffect(() => {
+    // Skip if we've already done the initial load
+    if (initialLoadComplete) return;
+    
+    // Wait for departments to be available
+    if (allDepartments?.length > 0) {
+      const selectedDepartment = localStorage.getItem("selectedDepartment");
+      
+      if (selectedDepartment &&  data.length > 0) {
+        // Check if the department from localStorage exists in the available departments
+        const departmentExists = allDepartments.some(
+          dept => (lang === 'english' ? dept.name_en : dept.name_ar) === selectedDepartment
+        );
+        
+        if (departmentExists) {
+          // Apply selection and mark as from localStorage to avoid loops
+          handleDepartmentSelection('main', selectedDepartment, true);
+          
+          // Also open this department in the UI
+          setOpenDepartments(prev => ({
+            ...prev,
+            [selectedDepartment]: true
+          }));
+          
+          // Dispatch an action to force data filtering if needed
+          // dispatch({ type: 'APPLY_FILTER', payload: { mainDepartment: selectedDepartment } });
+          
+          console.log("Applied filter from localStorage:", selectedDepartment);
+        }
+      }
+      
+      // Mark initial load as complete regardless of whether we found a department
+      setInitialLoadComplete(true);
+    }
+  }, [data]);
   
-    return (
-      <div className="space-y-4">
-        {allDepartments?.map((dept) => (
+  // DEBUG: Log when filters change
+  useEffect(() => {
+    console.log("Active filters changed:", activeFilters);
+  }, [activeFilters]);
+  
+  // Helper function to get department name based on language
+  const getDeptName = (dept: { name_en: string; name_ar: string }) => {
+    return lang === 'english' ? dept.name_en : dept.name_ar;
+  };
+
+  return (
+    <div className="space-y-4">
+      {allDepartments?.map((dept) => {
+        const deptName = getDeptName(dept);
+        
+        return (
           <div key={dept.name_en} className="space-y-2">
             {/* Department Button */}
             <button
               onClick={() => {
-                handleDepartmentSelection('main', lang === 'english' ? dept.name_en : dept.name_ar);
-                toggleVisibility((lang === "english" ? dept.name_en : dept.name_ar).toString()); // Toggle visibility for department
+                handleDepartmentSelection('main', deptName);
+                toggleVisibility(deptName);
               }}
               className={`flex items-center justify-between w-full p-2 text-left rounded-lg transition
-                ${activeFilters.mainDepartment === (lang === 'english' ? dept.name_en : dept.name_ar)
+                ${activeFilters.mainDepartment === deptName
                   ? 'bg-teal-50 text-teal-700'
                   : 'hover:bg-gray-50'}`}
             >
-              <span className="font-medium">
-                {lang === 'english' ? dept.name_en : dept.name_ar}
-              </span>
+              <span className="font-medium">{deptName}</span>
               {/* Chevron Icon */}
-              {openDepartments[(lang === "english" ? dept.name_en : dept.name_ar).toString()] ? 
-              <ChevronDown size={16} /> : <ChevronRight size={16} />}
+              {openDepartments[deptName] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </button>
-  
-            {/* Sub-department dropdown, only visible if the department is expanded */}
-            {openDepartments[(lang === "english" ? dept.name_en : dept.name_ar).toString()] && 
-            dept.sub_departments?.map((subDept) => (
-              <div key={lang === "english" ? subDept.name_en : subDept.name_ar} className="ml-4 space-y-2">
-                {/* Sub-department Button */}
-                <button
-                  onClick={() => {
-                    handleDepartmentSelection('sub', lang === 'english' ? subDept.name_en : subDept.name_ar);
-                    toggleVisibility((lang === "english" ? subDept.name_en : subDept.name_ar).toString()); // Toggle visibility for sub-department
-                  }}
-                  className={`flex items-center justify-between w-full p-2 text-left rounded-lg transition
-                    ${activeFilters.subDepartment === (lang === 'english' ? subDept.name_en : subDept.name_ar)
-                      ? 'bg-teal-50 text-teal-700'
-                      : 'hover:bg-gray-50'}`}
-                >
-                  <span className="font-medium">
-                    {lang === 'english' ? subDept.name_en : subDept.name_ar}
-                  </span>
-                  {/* Chevron Icon for sub-department */}
-                  {openDepartments[(lang === "english" ? subDept.name_en : subDept.name_ar).toString()] ? 
-                  <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                </button>
-  
-                {/* Nested sub-department dropdown, only visible if the sub-department is expanded */}
-                {openDepartments[(lang === "english" ? subDept.name_en : subDept.name_ar).toString()] && 
-                subDept.nested_sub_departments?.map((nestedDept) => (
+
+            {/* Sub-department dropdown */}
+            {openDepartments[deptName] && dept.sub_departments?.map((subDept) => {
+              const subDeptName = getDeptName(subDept);
+              
+              return (
+                <div key={subDept.name_en} className="ml-4 space-y-2">
+                  {/* Sub-department Button */}
                   <button
-                    key={nestedDept.name_en}
                     onClick={() => {
-                      handleDepartmentSelection('nested', lang === 'english' ? nestedDept.name_en : nestedDept.name_ar);
-                      // toggleVisibility((lang === "english" ? subDept.name_en : subDept.name_ar).toString()); 
+                      handleDepartmentSelection('sub', subDeptName);
+                      toggleVisibility(subDeptName);
                     }}
-                    className={`ml-4 w-full p-2 text-left rounded-lg transition
-                      ${activeFilters.nestedDepartment === (lang === 'english' ? nestedDept.name_en : nestedDept.name_ar)
+                    className={`flex items-center justify-between w-full p-2 text-left rounded-lg transition
+                      ${activeFilters.subDepartment === subDeptName
                         ? 'bg-teal-50 text-teal-700'
                         : 'hover:bg-gray-50'}`}
                   >
-                    {lang === 'english' ? nestedDept.name_en : nestedDept.name_ar}
+                    <span className="font-medium">{subDeptName}</span>
+                    {/* Chevron Icon for sub-department */}
+                    {openDepartments[subDeptName] ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                   </button>
-                ))}
-              </div>
-            ))}
+
+                  {/* Nested sub-department dropdown */}
+                  {openDepartments[subDeptName] && subDept.nested_sub_departments?.map((nestedDept) => {
+                    const nestedDeptName = getDeptName(nestedDept);
+                    
+                    return (
+                      <button
+                        key={nestedDept.name_en}
+                        onClick={() => {
+                          handleDepartmentSelection('nested', nestedDeptName);
+                        }}
+                        className={`ml-4 w-full p-2 text-left rounded-lg transition
+                          ${activeFilters.nestedDepartment === nestedDeptName
+                            ? 'bg-teal-50 text-teal-700'
+                            : 'hover:bg-gray-50'}`}
+                      >
+                        {nestedDeptName}
+                      </button>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
-        ))}
-       
-      </div>
-    );
-  };
-  
+        );
+      })}
+    </div>
+  );
+};
