@@ -10,7 +10,7 @@ function App() {
   // Update the state based on the URL path
   useEffect(() => {
     const path = window.location.pathname; 
-    const pageOptions = ['admin', 'store'];
+    const pageOptions = ['admin', 'store', 'details'];
     const currentPage = pageOptions.find((page) => path.includes(page)) || 'home';
     setCurrentPage(currentPage);
   }, []);

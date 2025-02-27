@@ -18,9 +18,7 @@ export const DETAILS = () => {
     const [selectedImage, setSelectedImage] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
     
-     const lang = localStorage.getItem("lang") ?
-      localStorage.getItem("lang")
-       : useSelector((state: RootState) => state.language)
+    const lang = useSelector((state: RootState) => state.language);
     const API_URL = import.meta.env.VITE_SERVER_URL;
     const isArabic = lang === "arabic";
 
@@ -99,7 +97,7 @@ export const DETAILS = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-teal-50 via-indigo-50 to-purple-50 p-6 pt-14 pb-20">
+        <div className="min-h-screen bg-gradient-to-r from-teal-50 via-indigo-50 to-purple-50 p-6 pt-24 pb-20">
             <div className="max-w-6xl mx-auto">
                 {/* Navigation */}
                 <nav className="flex items-center justify-between mb-8">

@@ -1,122 +1,76 @@
-import { Filter, SlidersHorizontal, Tags } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Filter, SlidersHorizontal, Tags, ArrowLeftCircle } from "lucide-react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { DropdownHierarchy } from "./DropdownHierarchy";
 import { useDispatch, useSelector } from "react-redux";
-import { setLanguage } from "../website/actions/action";
+import {  setFilteredData, setIsMobileSidebarOpen } from "./actions/action";
 import { AppDispatch, RootState } from "../website/store";
 import toast from "react-hot-toast";
 import { GET } from "./Requests";
+import { SidebarProps, ActiveFilters, AllDepartments } from "../types";
 
-interface SortOption {
-    label: string;
-    value: string;
-}
-interface ActiveFilters extends DepartmentSelection {
-    sort?: string;
-}
+export const Sidebar = ({ data }: SidebarProps) => {
 
-interface DepartmentSelection {
-    mainDepartment?: string;
-    subDepartment?: string;
-    nestedDepartment?: string;
-}
-
-interface AllDepartments {
-    id: number;
-    name_ar: string;
-    name_en: string;
-    sub_departments: SubDepartments[]
-}
-
-interface SubDepartments {
-    department_id: string;
-    id: number;
-    name_ar: string;
-    name_en: string;
-    nested_sub_departments: NestedDepartments[]
-}
-
-interface NestedDepartments {
-    id: number;
-    name_ar: string;
-    name_en: string;
-}
-
-interface ProductData {
-    id: number;
-    name: string;
-    description: string;
-    department: string;
-    image: string;
-    price: string;
-  }
-
-  interface SidebarProps {
-    data: ProductData[];
-}
-
-export const Sidebar = ({ data }: SidebarProps)  => {
-    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const dispatch: AppDispatch = useDispatch();
-    const lang = useSelector((state: RootState) => state.language);
+     const lang = localStorage.getItem("lang") ?
+      localStorage.getItem("lang")
+       : useSelector((state: RootState) => state.language)
+    const dropdown = useSelector((state: RootState) => state.dropdown);
     const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
     const [allDepartments, setAllDepartments] = useState<AllDepartments[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredData, setFilteredData] = useState<ProductData[]>([]);
+
     const fetchData = useCallback(async () => {
-     
         try {
             const [allDepartmentsResponse] = await Promise.all([
                 GET('api/all-departments')
             ]);
-
             setAllDepartments(allDepartmentsResponse.data);
         } catch (error) {
             toast.error("Failed to load store data");
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         fetchData();
-    }, [lang]);
+    }, [fetchData, lang]);
 
-
-    const sortOptions: SortOption[] = [
+    const sortOptions = useMemo(() => [
         { label: lang === "english" ? "Latest First" : "الحديثات اولا", value: 'latest' },
         { label: lang === "english" ? "Oldest First" : "القديمات اولا", value: 'oldest' },
         { label: lang === "english" ? 'A-Z' : "من الالف الى الياء", value: 'az' },
         { label: lang === "english" ? 'Z-A' : "من الياء الى الالف", value: 'za' },
-    ];
+    ], [lang]);
 
-    const changeLanguage = () => {
-        clearFilters();
-        dispatch(setLanguage(lang === "english" ? "arabic" : "english"));
-    };
+    // const changeLanguage = useCallback(() => {
+    //     clearFilters();
+    //     dispatch(setLanguage(lang === "english" ? "arabic" : "english"));
+    
+    // }, [dispatch, lang]);
 
-    const clearFilters = () => {
+    const clearFilters = useCallback(() => {
         setActiveFilters({});
         setSearchTerm('');
-        setIsMobileSidebarOpen(false);
-    };
+        dispatch(setIsMobileSidebarOpen(true))
+    }, []);
 
-    const getActiveFilterDepartment = () => {
+    const getActiveFilterDepartment = useCallback(() => {
         return activeFilters.nestedDepartment || activeFilters.subDepartment || activeFilters.mainDepartment;
-    };
+    }, [activeFilters.nestedDepartment, activeFilters.subDepartment, activeFilters.mainDepartment]);
 
-    useEffect(() => {
+    const filteredAndSortedData = useMemo(() => {
         let result = [...data];
         const activeDepartment = getActiveFilterDepartment();
 
         if (searchTerm) {
             result = result.filter(product =>
                 product.name.toLowerCase().includes(searchTerm.toLowerCase())
-                // ||
-                // product.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
         if (activeDepartment) {
-            result = result.filter(product => product.department === activeDepartment);
+            result = result.filter(product => 
+                [product.department, product.sub_department, product.nested_department].includes(activeDepartment)
+            );
         }
 
         if (activeFilters.sort) {
@@ -136,27 +90,33 @@ export const Sidebar = ({ data }: SidebarProps)  => {
             }
         }
 
-        setFilteredData(result);
-    }, [searchTerm, activeFilters, data]);
+        return result;
+    }, [searchTerm, activeFilters.sort, getActiveFilterDepartment]);
 
+    // Only dispatch when the filtered data actually changes
+    useEffect(() => {
+        dispatch(setFilteredData(filteredAndSortedData));
+    }, [dispatch, filteredAndSortedData]);
 
     return (
-        <div className={`
-      lg:w-80 w-full bg-white shadow-2xl p-6 space-y-6 
-      lg:static fixed inset-y-0 left-0 z-40 
-      transform transition-transform duration-300
-      ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-    `}>
+        <div style={{position: "fixed"}} className={`
+            lg:w-80 w-full bg-white shadow-2xl p-6 space-y-6 
+            lg:static fixed inset-y-0 left-0 z-40 
+            transform transition-transform duration-300
+            overflow-y-auto max-h-screen 
+            ${dropdown ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
-                    <Filter className="text-blue-600" size={24} />
+                    <Filter style={{color: "rgb(57, 182, 189)"}} size={24} />
                     <h2 className="text-2xl font-bold text-gray-800">
                         {lang === "arabic" ? "المتجر" : "Store"}
                     </h2>
                 </div>
                 <button
                     onClick={clearFilters}
-                    className="text-sm text-blue-600 hover:text-blue-800 transition"
+                    className="text-sm transition"
+                    style={{color: "rgb(57, 182, 189)"}}
                 >
                     {lang === "arabic" ? "حذف التغييرات" : "Clear all"}
                 </button>
@@ -172,7 +132,7 @@ export const Sidebar = ({ data }: SidebarProps)  => {
                 <select
                     value={activeFilters.sort || ''}
                     onChange={(e) => setActiveFilters(prev => ({ ...prev, sort: e.target.value }))}
-                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#39B6BD] focus:border-[#39B6BD]"
                 >
                     <option value="">
                         {lang === "arabic" ? "اختر نوع الترتيب" : "Select sorting"}
@@ -201,12 +161,24 @@ export const Sidebar = ({ data }: SidebarProps)  => {
             </div>
 
             <div>
-                <button
+                {/* <button
                     onClick={changeLanguage}
-                    className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition"
+                    className="px-4 py-2 bg-[#39B6BD] text-white font-semibold rounded-lg shadow-md 
+                    focus:outline-none focus:ring-2 focus:ring-[#39B6BD] focus:ring-opacity-50 transition"
+                    style={{backgroundColor: "rgb(57, 182, 189)"}}
                 >
                     {lang === "arabic" ? "تغيير اللغة الى الانجليزي" : "Change language to Arabic"}
+                </button> */}
+
+                {dropdown && 
+                <div className="lg:hidden flex items-center justify-start pt-3">
+                <button className="bg-gradient-to-r bg-[#39B6BD] text-white font-semibold 
+                py-2 px-2 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                onClick={() => {dispatch(setIsMobileSidebarOpen(false))}}>
+                     <ArrowLeftCircle className="w-7 h-7" />
                 </button>
+                </div>
+}
             </div>
 
             {(activeFilters.mainDepartment || activeFilters.subDepartment ||
@@ -217,7 +189,7 @@ export const Sidebar = ({ data }: SidebarProps)  => {
                         </h3>
                         <div className="space-y-2">
                             {getActiveFilterDepartment() && (
-                                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">
+                                <span className="inline-block bg-[#39B6BD] text-white text-xs px-3 py-1 rounded-full">
                                     {getActiveFilterDepartment()}
                                 </span>
                             )}
@@ -230,5 +202,5 @@ export const Sidebar = ({ data }: SidebarProps)  => {
                     </div>
                 )}
         </div>
-    )
+    );
 };

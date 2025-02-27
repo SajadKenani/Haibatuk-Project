@@ -7,10 +7,8 @@ import prize from "./assests/images/prize.png";
 import costumers from "./assests/images/costumers.png";
 import group from "./assests/images/group.png";
 import about from "./assests/images/about.png";
-import prize_logo from "./assests/images/prize_logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 
-import floor from "./assests/images/floor.png";
 import house from "./assests/images/house.png";
 import pc from "./assests/images/pc.png";
 import win from "./assests/images/win.png"
@@ -18,6 +16,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import AOS from 'aos';
 import 'aos/dist/aos.css'
 import corner from "./assests/images/corner.png"
+import darkCorner from "./assests/images/cornerDark.png"
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import contact from "./assests/images/contact.png"
@@ -25,57 +24,13 @@ import arabic from "./arabic.json";
 import english from "./english.json";
 import { Link } from "react-scroll";
 import { useNavigate } from "react-router-dom";
-import { Pagination } from "@mui/material";
-import { Navigation } from "lucide-react";
 import { GET } from "../components/Requests";
-
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-
-
-interface ProductData {
-  id: number;
-  name_en: string;
-  description_en: string;
-  type_en: string;
-  brand_en: string;
-  name_ar: string;
-  description_ar: string;
-  type_ar: string;
-  brand_ar: string;
-  image: string;
-  price: string;
-  size: string;
-  department: string;
-  subDepartment: string;
-}
-
-const handleLogin = async (username: string, password: string) => {
-  const API_URL = import.meta.env.VITE_SERVER_URL;
-  try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }), // Send username and password as JSON
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("@storage_Key", data.token); // Store the received token in localStorage
-    } else {
-      const errorData = await response.json();
-      console.error("Login failed: " + errorData.message);
-    }
-  } catch (error) {
-    console.log("Error during login: ");
-  }
-};
+import { ProductData } from "../types";
 
 
 export const CONTENT = () => {
   const [data, setData] = useState<ProductData[]>([]);
-  const lang = useSelector((state: RootState) => state.language);
+  const lang = useSelector((state: RootState) => state.language)
 
   const navigate = useNavigate()
 
@@ -87,47 +42,41 @@ export const CONTENT = () => {
   const theme = useSelector((state: RootState) => state.theme);
 
   const cardData = [
+
+    {
+      imgSrc: pc,
+      title: lang === "arabic" ? "منتجات التنظيف" : "Cleaning Products",
+      description:
+        lang === "arabic"
+          ? "مجموعة متنوعة من العطور المميزة التي تناسب كل الأذواق."
+          : "A variety of unique perfumes to suit all tastes.",
+    },
     {
       imgSrc: house,
-      title: lang === "arabic" ? "منتجات المعطرات " : "Fragrance Products",
+      title: lang === "arabic" ? "منتجات العطور والمعطرات" : "Perfumes and Fragrances Products",
       description:
         lang === "arabic"
           ? "منتجات معطرة لإضفاء روائح منعشة وجذابة لمنزلك."
           : "Fragrance products to bring fresh and appealing scents to your home.",
     },
     {
-      imgSrc: pc,
-      title: lang === "arabic" ? "منتجات العطور " : "Perfume Products",
-      description:
-        lang === "arabic"
-          ? "مجموعة متنوعة من العطور المميزة التي تناسب كل الأذواق."
-          : "A variety of unique perfumes to suit all tastes.",
-    },
-
-    {
       imgSrc: win,
-      title: lang === "arabic" ? " منتجات ورقية " : "Paper Products",
+      title: lang === "arabic" ? "منتجات الورقيات" : "Paper Products",
       description:
         lang === "arabic"
           ? "منتجات ورقية عالية الجودة لكل احتياجاتك اليومية."
           : "High-quality paper products for all your daily needs.",
     },
 
-    {
-      imgSrc: floor,
-      title: lang === "arabic" ? " منتجات تنظيف " : "Cleaning Products",
-      description:
-        lang === "arabic"
-          ? "منتجات التنظيف السريعة والسهلة التي تجعل حياتك أفضل."
-          : "Fast and easy cleaning products that make your life better.",
-    },
 
   ];
 
   const fetchProducts = async () => {
+    setIsLoading(true);
     try {
-      const data = await GET("api/product-en")
+      const data = await GET(`api/selected_products`)
       setData(data.data);
+      console.log(data.data)
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -136,27 +85,8 @@ export const CONTENT = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("@storage_Key");
-
-    if (!token) {
-      // Get username and password from environment variables
-      const storedUsername = import.meta.env.VITE_CLIENT_USERNAME;
-      const storedPassword = import.meta.env.VITE_CLIENT_PASSWORD;
-
-      if (storedUsername && storedPassword) {
-        handleLogin(storedUsername, storedPassword); // Attempt login with stored credentials
-      } else {
-        console.error("Username or password is missing from environment variables");
-      }
-    }
-
-  }, []);
-
-
-
-  useEffect(() => {
     fetchProducts()
-  }, [])
+  }, [lang])
 
   // Decode image function
   const decodeImage = (image: string): string => {
@@ -175,16 +105,16 @@ export const CONTENT = () => {
 
   useEffect(() => {
     // Simulate a data fetching process (e.g., after fetching product data)
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setIsLoading(false); // Set loading to false once data is fetched
     }
   }, [data]);
 
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setValue(event.target.value as string);
-  };
+  // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setValue(event.target.value as string);
+  // };
   return (
     <>
 
@@ -504,7 +434,7 @@ export const CONTENT = () => {
           >
             {lan.estableshemnt}
           </p>
-
+{/* 
           {lang === 'arabic' ? (
             <div
               className="flex items-right justify-end gap-2 mb-4"
@@ -528,7 +458,7 @@ export const CONTENT = () => {
                 className="w-6 h-6"
               />
             </div>
-          )}
+          )} */}
 
           <p
             className={`mb-6 leading-relaxed -mt-2 ${theme === "dark" ? "text-white" : "text-black"}`}
@@ -564,36 +494,55 @@ export const CONTENT = () => {
           {lan.what_we_offer}
         </h1>
         <div className="flex justify-center flex-wrap gap-6">
-          {cardData.map((card, index) => (
-            index === 1 ? (
-              <div
-                key={index}
-                className="info-card text-center special-card transform transition-transform duration-500 hover:scale-105 hover:shadow-xl"
-                style={{ backgroundColor: "#2EC2C8", borderRadius: "12px", padding: "1rem" }}
-                data-aos="zoom-in"
-              >
-                <div className={`circle ${theme === "dark" ? "bg-gray-800" : "bg-white"} flex items-center justify-center  rounded-full w-24 h-24 mx-auto mb-4`}>
-                  <img src={card.imgSrc} alt="Special Window" />
-                </div>
-                <h1 className={"text-white text-lg"}>{card.title}</h1>
-                <p className="text-white text-sm">{card.description}</p>
-              </div>
-            ) : (
-              <div
-                key={index}
-                className="info-card text-center transform transition-all duration-500 
-                hover:scale-105 hover:shadow-lg "
-                style={{ borderRadius: "12px", padding: "1rem", border: "1px solid #ddd" }}
-                data-aos="zoom-in"
-              >
-                <div className={`circle ${theme === "dark" ? "bg-gray-800" : "bg-white"} flex items-center justify-center rounded-full w-24 h-24 mx-auto mb-4`}>
-                  <img src={card.imgSrc} alt="Window" />
-                </div>
-                <h1 className="text-lg" style={{ color: "#2EC2C8" }}>{card.title}</h1>
-                <p className={`text-sm ${theme === "dark" ? "text-white" : "text-back"}`}>{card.description}</p>
-              </div>
+          {cardData && cardData.length && cardData?.map((card, index) => (
+        
+        <div
+        key={index}
+        className="info-card text-center transform transition-all duration-500 
+        hover:scale-105 hover:bg-[#39B6BD] hover:shadow-lg cursor-pointer 
+        text-[#39B6BD] hover:text-white"
+        style={{ 
+          borderRadius: "12px", 
+          padding: "1rem", 
+          border: "1px solid #ddd",
+          transition: "all 0.2s ease-in-out",
+        }}
+        data-aos="fade-up"
+        data-aos-duration="800"
+        data-aos-delay={index * 100}
+        onClick={() => {
+          // Wait for animation to complete before navigation
+          setTimeout(() => {
+            localStorage.setItem("selectedDepartment", String(card.title));
+            navigate("store");
+            window.scrollTo(0, 0);
+          }, 300);
+        }}
+        data-index={index}
+      >
+        <div 
+          className={`circle ${theme === "dark" ? "bg-gray-800" : "bg-white"} 
+          flex items-center justify-center rounded-full w-24 h-24 mx-auto mb-4 
+          transition-transform duration-500 hover:rotate-12`}
+        >
+          <img 
+            src={card.imgSrc} 
+            alt={card.title}
+            className="transition-all duration-500 hover:scale-110 "
+          />
+        </div>
+        <h1 className="text-lg font-semibold  hover:text-white 
+        transition-colors text-sm">
+          {card.title}
+        </h1>
+        <p className={`text-sm ${theme === "dark" ? "text-white" : " hover:text-white"} 
+          transition-opacity duration-500 opacity-80 group-hover:opacity-100 text-black`}>
+          {card.description}
+        </p>
+      </div>
+
             )
-          ))}
+          )}
         </div>
       </div>
 
@@ -602,13 +551,18 @@ export const CONTENT = () => {
       {/* --------------------------------  Store Section -------------------------------- */}
 
       <div style={{ width: "100%", margin: "0 auto", marginTop: "50px", marginBottom: "100px" }}>
+      <h1 className={`text-center mb-14 pt-24 text-xl font-bold ${theme === "dark" ? "text-white" : "text-black"}`}>
+          {lan.our_products}
+        </h1>
       {isLoading ? (
         // Loading spinner or animation
-        <div className="loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '450px' }}>
-          <div className="spinner" style={{ border: '4px solid #f3f3f3', borderTop: '4px solid #39B6BD', borderRadius: '50%', width: '40px', height: '40px', animation: 'spin 2s linear infinite' }}></div>
+        <div className="loading-container " style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '450px' }}>
+          <div className="spinner" style={{ borderTop: '4px solid #39B6BD', borderRadius: '50%', width: '40px', height: '40px', 
+            animation: 'spin 2s linear infinite' }}></div>
         </div>
       ) : (
         <Swiper
+        
          
           loop={true}
           pagination={{ clickable: true }}
@@ -619,15 +573,16 @@ export const CONTENT = () => {
             1024: { slidesPerView: 5, spaceBetween: 0 },
           }}
         >
-          {data.map((product) => (
+          {data && data?.length> 0 && data?.map((product) => (
             <SwiperSlide key={product.id}>
               <div
-                className="item-container relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 mt-20"
+                className="item-container relativerounded-lg overflow-hidden shadow-md 
+                hover:shadow-xl transition-shadow duration-300 mt-20 bg-gray-800"
                 style={{ width: "280px", height: "450px", margin: "0 auto", marginBottom: "60px" }}
                 data-aos="fade-up"
               >
                 
-                <div className="image-container relative w-full">
+                <div className={`image-container relative w-full ${theme === "light" ? "bg-white" : "bg-gray-800" } `}>
                   <img
                     src={`data:image/png;base64,${decodeImage(product.image)}`}
                     alt="Product"
@@ -637,50 +592,51 @@ export const CONTENT = () => {
                   />
                 
                   <img
-                    src={corner}
+                    src={theme === "light" ? corner : darkCorner}
                     alt="Corner Design"
                     className="absolute w-16 h-12"
                     style={{ left: 0, bottom: 0, marginBottom: "50px" }}
                     data-aos="fade-up"
                   />
-                  <div className="badge absolute top-3 left-3 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                  <div className="badge absolute top-3 left-3 bg-[#39B6BD]-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                     {lang === "arabic" ? "جديد" : "New"}
                   </div>
                 </div>
 
                 <div
-                  className="content-container p-6 pt-6 flex flex-col justify-between bg-white"
+                  className={`content-container p-6 pt-6 flex flex-col justify-between ${theme === "light" ? "bg-white" : "bg-gray-800"}  pb-40`}
                   style={{ borderRadius: "0 50px 0 0 ", zIndex: 321, marginTop: "-62px", width: "100%" }}
                   data-aos="fade-up"
                 >
-                  <h2 className="font-semibold text-lg text-gray-800 truncate" style={{ textAlign: textDirection }}>
+                  <h2 className={`font-semibold text-lg ${theme === "light" ? "text-gray-600" : "text-gray-200"}  truncate`} style={{ textAlign: textDirection }}>
                     {lang === "arabic" ? product.name_ar : product.name_en}
                   </h2>
-                  <h3 className="text-sm text-gray-600 truncate mb-2" style={{ textAlign: textDirection }}>
+                  <h3 className={`text-sm ${theme === "light" ? "text-gray-600" : "text-gray-300"} truncate mb-2`} style={{ textAlign: textDirection }}>
                     {lang === "arabic" ? product.brand_ar : product.brand_en}
                   </h3>
                   <p
-                    className="text-xs text-gray-500 leading-5"
+                    className={`text-xs ${theme === "light" ? "text-gray-500" : "text-gray-400"}  leading-5`}
                     style={{ textAlign: textDirection, textDecoration: "ltr" }}
                   >
                     {lang === "arabic"
-                      ? product.description_ar.split(" ").length > 12
-                        ? product.description_ar.split(" ").slice(0, 12).join(" ") + "...إلخ"
+                      ? product.description_ar?.split(" ").length ?? 0 > 12
+                        ? product.description_ar?.split(" ").slice(0, 12).join(" ") + "...إلخ"
                         : product.description_ar
-                      : product.description_en.split(" ").length > 12
-                      ? product.description_en.split(" ").slice(0, 12).join(" ") + "..."
+                      : product.description_en?.split(" ").length ?? 0 > 12
+                      ? product.description_en?.split(" ").slice(0, 12).join(" ") + "..."
                       : product.description_en}
                   </p>
 
                   <div
-                    className="flex items-center mt-4"
+                    className="flex items-center mt-4 "
                     style={lang === "arabic" ? { justifyContent: "end" } : { justifyContent: "start" }}
                   >
                     <button
-                      className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-300 bg-teal-500 hover:bg-teal-600 shadow-md transform transition-all duration-500 hover:scale-105"
+                      className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-300 bg-[#39B6BD] 
+                      hover:bg-[#39B6BD] shadow-md transform transition-all duration-500 hover:scale-105"
                       style={{ backgroundColor: "#39B6BD" }}
                       data-aos="fade-up"
-                      onClick={() => {localStorage.setItem("productId", JSON.stringify(product.id)); navigate("./details")}}
+                      onClick={() => {localStorage.setItem("productId", String(product.id)); navigate("./details")}}
                       
                     >
                       {lan.view_details}
@@ -706,7 +662,7 @@ export const CONTENT = () => {
           {/* Contact Section Header */}
           <div className="text-left mb-8 mr-0 lg:mr-16">
             <h2
-              className="text-teal-600 text-3xl font-bold"
+              className="text-[#39B6BD] text-3xl font-bold"
               style={{ textAlign: textDirection }}
             >
               {lan.contact_us_button}
@@ -726,11 +682,11 @@ export const CONTENT = () => {
             <div className="w-full lg:w-1/2 mt-10 ">
               <ul className="list-none space-y-4">
                 <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
-                  <FaMapMarkerAlt className="text-teal-600 text-2xl " />
+                  <FaMapMarkerAlt className="text-[#39B6BD] text-2xl " />
                   <span>{lang === "arabic" ? "العراق، بغداد" : "Iraq, Baghdad"}</span>
                 </li>
                 <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
-                  <FaPhone className="text-teal-600 text-2xl" />
+                  <FaPhone className="text-[#39B6BD] text-2xl" />
                   <div className="space-y-2">
                     <a href="tel:+9647722995020" >
                       +9647722995020
@@ -743,7 +699,7 @@ export const CONTENT = () => {
 
                 </li>
                 <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
-                  <FaEnvelope className="text-teal-600 text-2xl" />
+                  <FaEnvelope className="text-[#39B6BD] text-2xl" />
                   <span>info@haibatuk.com</span>
                 </li>
               </ul>
@@ -762,17 +718,17 @@ export const CONTENT = () => {
 
         {/* Social Media Links */}
         <div
-          className="absolute lg:relative flex flex-col bg-teal-500 items-center justify-center 
-    lg:-ml-14 top-0 lg:top-auto hidden lg:flex p-4 rounded-r-lg"
+          className="absolute lg:relative flex flex-col items-center justify-center 
+    lg:-ml-14 top-0 lg:top-auto hidden lg:flex p-4 rounded-r-lg" style={{backgroundColor: "#39B6BD"}}
         >
           <FaFacebookF
-            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-teal-700 transition duration-200 mb-4`}
+            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-[#39B6BD] transition duration-200 mb-4`}
           />
           <FaTwitter
-            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-teal-700 transition duration-200 mb-4`}
+            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-[#39B6BD] transition duration-200 mb-4`}
           />
           <FaLinkedinIn
-            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-teal-700 transition duration-200 mb-4`}
+            className={`${theme === "light" && "text-white"} text-3xl cursor-pointer hover:text-[#39B6BD] transition duration-200 mb-4`}
           />
         </div>
 

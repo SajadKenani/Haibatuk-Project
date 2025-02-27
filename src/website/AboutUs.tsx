@@ -1,52 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from "./store";
+import { Content, Language } from '../types';
+import HaibatukSimplePage from './AcoutUsPara';
 
-
-// Define the structure of the content object
-interface ContentCategory {
-  title: string;
-  icon: string;
-  description: string;
-  items: string[];
-}
-
-interface ContentHero {
-  title: string;
-  description: string;
-}
-
-interface ContentButton {
-  products: string;
-  about: string;
-}
-
-interface ContentAbout {
-  title: string;
-  description: string;
-  features: { icon: string; text: string }[];
-}
-
-interface ContentMission {
-  title: string;
-  description: string;
-  values: { icon: string; text: string; title: string }[];
-}
-
-interface Content {
-  since: string;
-  hero: ContentHero;
-  buttons: ContentButton;
-  products: {
-    title: string;
-    description: string;
-    categories: ContentCategory[];
-  };
-  about: ContentAbout;
-  mission: ContentMission;
-}
-
-type Language = 'english' | 'arabic';
 
 // Define the structure of the content object with keys for English and Arabic
 const content: { [key in Language]: Content } = {
@@ -202,6 +159,9 @@ export default function About() {
         </div>
       </section>
 
+      <HaibatukSimplePage />
+
+
       {/* Product Categories */}
       <section className={`py-20 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-6 lg:px-40">
@@ -233,6 +193,7 @@ export default function About() {
           </div>
         </div>
       </section>
+
 
       {/* About Section */}
       <section className={`py-24 relative overflow-hidden`}>

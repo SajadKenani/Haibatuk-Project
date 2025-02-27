@@ -1,14 +1,8 @@
 import React, { ChangeEvent } from "react";
+import { InputFieldProps } from "../types";
 
 // Define prop types for InputField component
-interface InputFieldProps {
-  id: string;
-  label: string;
-  value: string;
-  type?: string;
-  placeholder?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+
 
 export const InputField: React.FC<InputFieldProps> = 
 ({ id, label, value, type = "text", placeholder, onChange }) => (

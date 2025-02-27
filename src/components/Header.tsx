@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../website/store";
-import { setLanguage } from "../website/actions/action";
-import { setTheme } from "../website/actions/action";
+import { setLanguage } from "./actions/action";
+import { setTheme } from "./actions/action";
 import logo from "../website/assests/images/logo.png";
 import arabic from "../website/arabic.json";
 import english from "../website/english.json";
@@ -45,11 +45,13 @@ export const BAR: React.FC = () => {
   const changeLanguageToArabic = useCallback(() => {
     dispatch(setLanguage("arabic"));
     setSelectedLanguage(arabic);
+    localStorage.setItem("lang", "arabic")
   }, [])
 
   const changeLanguageToEnglish = useCallback(() => {
     dispatch(setLanguage("english"));
     setSelectedLanguage(english);
+    localStorage.setItem("lang", "english")
   }, [])
 
   // Handle scroll event to change the background color
@@ -82,9 +84,7 @@ export const BAR: React.FC = () => {
         }`}
       style={{ zIndex: 10000, top: 0 }}
     >
-
-
-      <div className="flex justify-between items-center flex justify-between" 
+    <div className="flex justify-between items-center flex justify-between" 
       style={{ zIndex: 9999, width: "100%" }}>
         {/* Logo and Title */}
         <div className="flex items-center space-x-2 cursor-pointer header-logo" style={{ zIndex: 9999 }}>

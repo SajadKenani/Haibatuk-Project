@@ -16,6 +16,8 @@ export const CONTACT = () => {
     const textDirection = lang === "arabic" ? "end" : "start";
     const theme = useSelector((state: RootState) => state.theme);
 
+ 
+
     return (
         <>
             <div className="flex justify-center mt-16 mb-32 relative mt-40">

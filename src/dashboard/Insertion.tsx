@@ -3,28 +3,14 @@ import { InputField, TextArea, FileInput, SelectField } from '../components/addC
 import { Upload, ListPlus, CheckCircle, AlertCircle } from 'lucide-react';
 import { GET, POST } from "../components/Requests";
 import React from "react";
-
-interface Department {
-  id: string;
-  name_en: string;
-}
-
-interface SubDepartment {
-  id: string;
-  name_en: string;
-}
-
-interface NestedSubDepartment {
-  id: string;
-  name_en: string;
-}
+import { Department, NestedSubDepartment, SubDepartment } from "../types";
 
 export const ADD: React.FC = () => {
   const [data, setData] = useState({
     name_en: "", description_en: "", type_en: "", brand_en: "",
     name_ar: "", description_ar: "", type_ar: "", brand_ar: "",
     image: "", price: "", size: "", department: "", sub_department: "",
-    n_sub_department: "", more_images_id: [""],
+    n_sub_department: "", more_images_id: [""], is_selected: false,
   });
 
   const [error, setError] = useState("");
@@ -118,7 +104,7 @@ export const ADD: React.FC = () => {
         name_en: "", description_en: "", type_en: "", brand_en: "",
         name_ar: "", description_ar: "", type_ar: "", brand_ar: "",
         image: "", price: "", size: "", department: "", sub_department: "",
-        n_sub_department: "", more_images_id: [""],
+        n_sub_department: "", more_images_id: [""], is_selected: false,
       });
       setImagePreview("");
       setError("");
@@ -241,7 +227,7 @@ export const ADD: React.FC = () => {
                       label="Product Name (English) *"
                       value={data.name_en}
                       placeholder="Enter product name"
-                      onChange={(e) => handleInputChange("name_en", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("name_en", e)}
                     />
                     <TextArea
                       id="description_en"
@@ -255,14 +241,14 @@ export const ADD: React.FC = () => {
                       label="Type (English)"
                       value={data.type_en}
                       placeholder="Enter product type"
-                      onChange={(e) => handleInputChange("type_en", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("type_en", e)}
                     />
                     <InputField
                       id="brand_en"
                       label="Brand (English)"
                       value={data.brand_en}
                       placeholder="Enter brand name"
-                      onChange={(e) => handleInputChange("brand_en", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("brand_en", e)}
                     />
                   </>
                 ) : (
@@ -272,7 +258,7 @@ export const ADD: React.FC = () => {
                       label="Product Name (Arabic) *"
                       value={data.name_ar}
                       placeholder="أدخل اسم المنتج"
-                      onChange={(e) => handleInputChange("name_ar", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("name_ar", e)}
                     />
                     <TextArea
                       id="description_ar"
@@ -286,14 +272,14 @@ export const ADD: React.FC = () => {
                       label="Type (Arabic)"
                       value={data.type_ar}
                       placeholder="أدخل نوع المنتج"
-                      onChange={(e) => handleInputChange("type_ar", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("type_ar", e)}
                     />
                     <InputField
                       id="brand_ar"
                       label="Brand (Arabic)"
                       value={data.brand_ar}
                       placeholder="أدخل اسم العلامة التجارية"
-                      onChange={(e) => handleInputChange("brand_ar", e)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("brand_ar", e)}
                     />
                   </>
                 )}
@@ -308,14 +294,14 @@ export const ADD: React.FC = () => {
                     type="number"
                     value={data.price}
                     placeholder="0.00"
-                    onChange={(e) => handleInputChange("price", e)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("price", e)}
                   />
                   <InputField
                     id="size"
                     label="Size"
                     value={data.size}
                     placeholder="Enter size"
-                    onChange={(e) => handleInputChange("size", e)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleInputChange("size", e)}
                   />
                 </div>
 
@@ -323,7 +309,7 @@ export const ADD: React.FC = () => {
                   id="department"
                   label="Department *"
                   options={departments.map((dept: Department) => ({
-                    value: dept.id,
+                    value: String(dept.id),
                     label: dept.name_en,
                   }))}
                   value={data.department}
@@ -338,7 +324,7 @@ export const ADD: React.FC = () => {
                     id="subDepartment"
                     label="Sub-Department"
                     options={subDept.map((item: SubDepartment) => ({
-                      value: item.id,
+                      value: String(item.id),
                       label: item.name_en,
                     }))}
                     value={data.sub_department}
@@ -354,7 +340,7 @@ export const ADD: React.FC = () => {
                     id="NestedSubDepartment"
                     label="Nested-Sub-Department"
                     options={nestedSubDept.map((item: NestedSubDepartment) => ({
-                      value: item.id,
+                      value: String(item.id),
                       label: item.name_en,
                     }))}
                     value={data.n_sub_department}

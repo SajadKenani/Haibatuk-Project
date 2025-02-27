@@ -9,28 +9,29 @@ import store from './store';
 import ABOUT from "./AboutUs"
 import { CONTACT } from './contact';
 import { Link } from 'react-router-dom';
-import { DepartmentNavigator } from '../components/showDepartments';
+
 import { PhoneCall } from "lucide-react";
+import DETAILS from './store-details';
 const temporaryStorePage = () => {
-  const [time, setTime] = useState(3);
-  const [reload, setReload] = useState(false); 
+  const [time, setTime] = useState(1);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     if (time <= 0) {
-      setReload(true); 
+      setReload(true);
     }
   }, [time]);
 
   useEffect(() => {
     if (reload) {
-      window.location.reload(); 
+      window.location.reload();
     }
   }, [reload]);
 
   useEffect(() => {
     if (time > 0) {
       const interval = setInterval(() => {
-        setTime(prev => prev - 1); 
+        setTime(prev => prev - 1);
       }, 1000);
 
       // Cleanup interval on component unmount
@@ -39,18 +40,17 @@ const temporaryStorePage = () => {
   }, [time]); // Only run this effect when `time` changes
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="text-center bg-white p-6 rounded-lg shadow-lg">
-        <p className="text-lg font-semibold text-gray-800">
-          You'll be directed to the store page in <span className="text-blue-500">{time} seconds</span>.
-        </p>
-      </div>
+
+    <div className="loading-screen">
+      <div className="circle-loader"></div>
+      <img src={logo} alt="Logo" className="loading-logo" />
     </div>
+
   );
 }
 
 export const MAIN_WEB = () => {
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   // List of images to preload
   const imagesToLoad = [
@@ -89,7 +89,7 @@ export const MAIN_WEB = () => {
     };
 
     loadImages();
-  }, []); 
+  }, []);
 
   return (
     <Provider store={store}>
@@ -106,7 +106,7 @@ export const MAIN_WEB = () => {
             <Routes>
               <Route path="/" Component={CONTENT} />
               <Route path="/aboutUs" Component={ABOUT} />
-              <Route path="/departments" Component={DepartmentNavigator} />
+              <Route path="/details" Component={DETAILS} />
 
               <Route path='/contact' Component={CONTACT} />
               <Route path='/store' Component={temporaryStorePage} />
@@ -128,10 +128,10 @@ export const MAIN_WEB = () => {
 
               <a
                 href="tel:7074"
-                className="flex items-center gap-2 px-6 py-3 m-6 rounded text-white bg-teal-500 shadow-lg 
+                className="flex items-center gap-2 px-6 py-3 m-6 rounded text-white shadow-lg 
                 border-2 border-teal-600 cursor-pointer transition-transform 
                 duration-300 transform hover:scale-105 hover:bg-teal-600 hover:shadow-xl text-lg"
-                style={{ zIndex: 8752 }}
+                style={{ zIndex: 8752, backgroundColor: "#39B6BD" }}
               >
                 <PhoneCall size={24} />
                 7074

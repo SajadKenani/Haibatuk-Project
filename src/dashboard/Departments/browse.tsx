@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DELETE, GET } from "../../components/Requests";
-
-interface Department {
-  id: string;
-  name_en: string;
-  department: string
-}
+import { Department } from "../../types";
 
 export const BROWSE_DEPT = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -47,7 +42,7 @@ export const BROWSE_DEPT = () => {
   }, []);
 
   const navigate = (id: string) => {
-    localStorage.setItem("deptID", JSON.stringify(id));
+    localStorage.setItem("deptID", String(id));
     nav("/admin/departments/sub");
   };
 
@@ -68,7 +63,7 @@ export const BROWSE_DEPT = () => {
                 duration-300 ease-in-out p-6 dark:bg-gray-800 cursor-pointer"
               >
                 <div
-                  onClick={() => navigate(item.id)}
+                  onClick={() => navigate(String(item.id))}
                   className="flex justify-center flex-col items-center"
                 >
                   <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4">
@@ -80,7 +75,7 @@ export const BROWSE_DEPT = () => {
                 </div>
                 <div className="flex justify-center">
                   <button
-                    onClick={() => hanldeRemoveDept(item.id)}
+                    onClick={() => hanldeRemoveDept(String(item.id))}
                     disabled={removing === item.id} // Disable button if this department is being removed
                     className={`mt-4 w-28 py-2 px-4 rounded-md ${removing === item.id
                         ? "bg-gray-400 cursor-not-allowed"

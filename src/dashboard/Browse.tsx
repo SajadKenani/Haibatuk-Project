@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DELETE, GET } from "../components/Requests";
+import { DELETE, GET, POST } from "../components/Requests";
 import { Trash2, Eye, Tag, Box, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast, Toaster } from "react-hot-toast";
-
-interface ProductData {
-  id: number;
-  name_en: string;
-  description_en: string;
-  type_en: string;
-  brand_en: string;
-  image: string;
-  price: string;
-  size: string;
-  department: string;
-  sub_department: string;
-}
+import { ProductData } from "../types";
 
 export const BROWSE = () => {
   const [data, setData] = useState<ProductData[]>([]);
@@ -25,9 +13,11 @@ export const BROWSE = () => {
   const nav = useNavigate();
 
   const fetchProducts = async () => {
+    setLoading(true)
     try {
       const response = await GET("api/product-en");
       setData(response.data);
+      console.log(response.data)
     } catch (error) {
       toast.error("Failed to fetch products");
     } finally {
@@ -60,10 +50,20 @@ export const BROWSE = () => {
     }
   };
 
+  const handleSelectionProcess = useCallback(async (id: number) => {
+    try {
+      await POST("api/selected_products", { id })
+      toast.success("Product selected successfully");
+      await fetchProducts();
+    } catch (error) {
+      toast.error("Failed to delete product");
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
       <Toaster position="top-right" />
-      
+
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-center mb-12">
           <Layers className="mr-4 text-blue-400" size={40} />
@@ -80,7 +80,7 @@ export const BROWSE = () => {
           <AnimatePresence>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {data && data.length > 0 ? (
-                data.map((item) => (
+                data.sort((a, b) => a.id - b.id).map((item) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -134,10 +134,11 @@ export const BROWSE = () => {
                         </span>
                       </div>
 
+                      <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          localStorage.setItem("DepartmentID", JSON.stringify(item.id));
-                          nav("/details");
+                          localStorage.setItem("productId", String(item.id));
+                          nav("details");
                         }}
                         className="w-full flex items-center justify-center 
                         bg-blue-600 text-white py-3 rounded-lg 
@@ -146,6 +147,15 @@ export const BROWSE = () => {
                         <Eye className="mr-2" size={20} />
                         View Details
                       </button>
+                      <button
+                        onClick={() => handleSelectionProcess(item.id)}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300
+                      ${item.is_selected ? "bg-green-500 text-white hover:bg-green-600" : "bg-gray-300 text-black hover:bg-gray-400"}`}
+                      >
+                        {item.is_selected ? "✅" : "❌"}
+                      </button>
+                      </div>
+
                     </div>
                   </motion.div>
                 ))

@@ -49,7 +49,7 @@ const fetchFromApi = async (path: string, { method, body }: RequestOptions): Pro
       const errorDetails = await response.text();
       console.error(`API Error (${response.status}): ${errorDetails}`);
       throw new Error(`Error ${response.status}: ${errorDetails}`);
-    }
+    } 
 
     if (response.headers.get('Content-Type')?.includes('application/json')) {
       return await response.json();

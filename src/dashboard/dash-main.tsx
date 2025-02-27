@@ -97,7 +97,7 @@ export const DASHBOARD = () => {
                <Route path="/admin/departments" element={<MAIN_DEPT />} />
                <Route path="/admin/departments/sub" element={<SUB />} />
                <Route path="/admin/departments/sub/nested" element={<NESTEDSUB />} />
-               <Route path="/details" element={<DETAILS />} />
+               <Route path="/admin/details" element={<DETAILS />} />
 
              </Routes>
            </div>

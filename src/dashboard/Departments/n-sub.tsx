@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DELETE, POST } from "../../components/Requests";
 import { toast, Toaster } from "react-hot-toast";
+import { NestedSubDepartment } from "../../types";
 
-interface NestedSubDepartment {
-  id: Number;
-  sub_department_id: string;
-  name_en: string;
-  name_ar: string;
-}
 
 export const NESTEDSUB: React.FC = () => {
   const [nestedSubDepartment, setNestedSubDepartment] = useState<NestedSubDepartment[]>([]);

@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DELETE, POST } from "../../components/Requests";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-interface SubDepartment {
-  id: Number;
-  department_id: string;
-  name_en: string;
-  name_ar: string;
-}
+import { SubDepartment } from "../../types";
 
 export const SUB: React.FC = () => {
   const [subDepartment, setSubDepartment] = useState<SubDepartment[]>([]);
@@ -80,7 +74,7 @@ export const SUB: React.FC = () => {
   };
 
   const handleSubDepartmentSelection = (id: Number) => {
-    localStorage.setItem("nestedDeptID", JSON.stringify(id));
+    localStorage.setItem("nestedDeptID", String(id));
     nav("/admin/departments/sub/nested");
   }
 
@@ -116,7 +110,7 @@ export const SUB: React.FC = () => {
                 key={String(item.id)}
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 
                 transition-all duration-300 hover:shadow-xl group relative cursor-pointer"
-                onClick={() => handleSubDepartmentSelection(item.id)}
+                onClick={() => handleSubDepartmentSelection(Number(item.id))}
               >
                 <div className="flex flex-col">
                   <span className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
@@ -145,7 +139,8 @@ export const SUB: React.FC = () => {
                   {deletingId === item.id ? (
                     <div className="animate-spin">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
                     </div>
                   ) : (
@@ -158,7 +153,8 @@ export const SUB: React.FC = () => {
         ) : (
           <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              <path strokeLinecap="round" strokeLinejoin="round" 
+              strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
             <p className="text-xl text-gray-500 dark:text-gray-400">No Sub-Departments Added</p>
           </div>

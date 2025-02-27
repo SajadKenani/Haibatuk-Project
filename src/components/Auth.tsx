@@ -13,7 +13,6 @@ export const HandleLogin = async () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('@storage_Key', data.token); 
-        console.log(localStorage.getItem('@storage_Key'))
       } else {
         console.error("Login failed:", response.status, await response.text());
       }
