@@ -1,0 +1,374 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body, div, p, h1, h2, h3, h4, h5, h6 {
+  font-family: "Tajawal";
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-white {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-black {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-gray-800 {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#menu- {
+  z-index: 321312312;
+}
+
+/* Glowing Lights */
+.glowing-lights {
+  position: relative;
+  overflow: hidden;
+
+}
+
+.glowing-lights::before,
+.glowing-lights::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  animation: glowingLights 5s infinite ease-in-out;
+  background-size: 200px 200px;
+}
+
+.glowing-lights::after {
+  background: radial-gradient(circle, rgba(0, 166, 255, 0.2) 10%, transparent 70%) no-repeat;
+  animation: glowingLights 8s infinite ease-in-out alternate;
+  background-size: 150px 150px;
+}
+
+@keyframes glowingLights {
+  0% {
+    background-position: 0 0, 100% 100%;
+  }
+  25% {
+    background-position: 25% 50%, 75% 25%;
+  }
+  50% {
+    background-position: 50% 100%, 50% 50%;
+  }
+  75% {
+    background-position: 75% 25%, 25% 75%;
+  }
+  100% {
+    background-position: 100% 100%, 0 0;
+  }
+}
+
+/* Glowing Circle Animation */
+.glowing-circle {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(15, 235, 169, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(15, 235, 169, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+  animation: glowAnimation 3s infinite alternate ease-in-out;
+}
+
+@keyframes glowAnimation {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #39B6BD;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b9b98;
+}
+
+/* Fade-in Animations */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fadeInUp, .fadeInLeft, .fadeInRight {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* Header */
+.header {
+  transition: background-color 0.3s ease;
+}
+
+.header-logo {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Loading Screen */
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.7);
+  position: relative;
+}
+
+.circle-loader {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #39B6BD;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+.loading-logo {
+  width: 60px;
+  height: 60px;
+  margin-top: -5px;
+  z-index: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-screen p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Info Card */
+.info-card {
+  width: 250px;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 70px;
+}
+
+.info-card h1 {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.info-card p {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+/* Circle */
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: -65px;
+  border: 2px solid rgb(215, 215, 215);
+  padding: 25px;
+  
+}
+
+.circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bouncing Animation */
+@keyframes custom-bounce {
+  0%, 100% {
+    transform: translateY(-10%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.animate-bounce {
+  animation: custom-bounce 1s infinite;
+}
+
+/* Item Container */
+.item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 0px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.text-container {
+  text-align: center;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a73e8;
+}
+
+/* Shape Container */
+.shape-container {
+  position: relative;
+  margin-top: -30px;
+  width: 100%;
+}
+
+.contained {
+  border-radius: 0 50px 0 0;
+}
+
+.corner-image {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  margin-top: -80px;
+}
+
+/* Texthead Container */
+.texthead-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.description-container {
+  margin: 8px 0;
+}
+
+.description {
+  font-size: 14px;
+  color: #555;
+}
+
+.swiper-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+      /* Add these CSS styles to your stylesheet */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.7);
+        }
+        70% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 10px rgba(20, 184, 166, 0);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(20, 184, 166, 0);
+        }
+      }
+      
+      .pulse {
+        animation: pulse 0.5s;
+      }
