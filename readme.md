@@ -1,4 +1,4 @@
-# 📌 HaibatUK - Introductory Website with Store & Dashboard  
+# 📌 Haibatuk - Introductory Website with Store & Dashboard  
 🚀 Built with **React.js, Vite, TypeScript, Tailwind CSS, Golang, PostgreSQL** | Hosted on **Railway**  
 
 🔗 **Live Website:** [www.haibatuk.com](https://www.haibatuk.com)  
@@ -6,7 +6,7 @@
 ---
 
 ## 📖 About the Project  
-HaibatUK is a modern, high-performance website featuring:  
+Haibatuk is a modern, high-performance website featuring:  
 - 🏪 **Store** – Browse and purchase products seamlessly  
 - 📊 **Dashboard** – Manage data efficiently  
 - ⚡ **Fast & Responsive UI** – Powered by **React, Vite, and Tailwind CSS**  
