@@ -262,9 +262,16 @@ export const DETAILS = () => {
                                     <Mail className="w-5 h-5 text-gray-400 mt-1" />
                                     <div>
                                         <strong className="block mb-1">{isArabic ? "البريد الإلكتروني" : "Email"}</strong>
-                                        <a href="mailto:info@haibatuk.com" className="text-teal-600 hover:underline">
+                                        <a  href={`mailto:info@haibatuk.com?subject=${encodeURIComponent(product?.name_en || "")}&body=${encodeURIComponent(
+                                            `Hello, I'm interested in the following product: ${product.name_en}
+                                            🔹 Department: ${product.department}
+                                            🔹 Type: ${product.type_en}
+                                            🔹 Description: ${product.description_en}
+                                            Please provide more details. Thank you!`
+                                        )}`} className="text-teal-600 hover:underline">
                                             info@haibatuk.com
                                         </a>
+                                      
                                     </div>
                                 </div>
                                 
