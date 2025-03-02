@@ -117,7 +117,7 @@ export const DropdownHierarchy: React.FC<DropdownHierarchyProps> = ({
       // Mark initial load as complete regardless of whether we found a department
       setInitialLoadComplete(true);
     }
-  }, [data, allDepartments]);
+  }, [data]);
   
   // DEBUG: Log when filters change
   useEffect(() => {
