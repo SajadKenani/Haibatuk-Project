@@ -145,10 +145,10 @@ export const BAR: React.FC = () => {
             </li>
 
             <button onClick={() => {
-  navigation("contact");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+                navigation("contact");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              >
               <li className={`cursor-pointer hover:bg-gray-800 hover:bg-opacity-30
               py-6 transition-colors duration-300 px-6 
               ${theme === "dark" ? "text-white" : "text-black"}`}>
@@ -156,10 +156,10 @@ export const BAR: React.FC = () => {
               </li>
             </button>
             <button onClick={() => {
-  navigation("aboutUs");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+                navigation("aboutUs");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              >
               <li className={`cursor-pointer hover:bg-gray-800 hover:bg-opacity-30
               py-6 transition-colors duration-300 px-6 
               ${theme === "dark" ? "text-white" : "text-black"}`}>
@@ -167,10 +167,10 @@ export const BAR: React.FC = () => {
               </li>
             </button>
             <button onClick={() => {
-  navigation("");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+                navigation("");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              >
               <li className={`cursor-pointer hover:bg-gray-800 hover:bg-opacity-30
               py-6 transition-colors duration-300 px-6 
               ${theme === "dark" ? "text-white" : "text-black"}`}>
@@ -186,9 +186,9 @@ export const BAR: React.FC = () => {
             hover:bg-teal-500 text-teal-500 hover:text-white "
             style={{ borderColor: "#39B6BD" }}
             onClick={() => {
-  navigation("store");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
+              navigation("store");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
 
            
           >
@@ -217,26 +217,26 @@ export const BAR: React.FC = () => {
         
         <ul className="flex flex-col items-center space-y-4">
         <button onClick={() => {
-  navigation("");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+            navigation("");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          >
             <li className={`cursor-pointer ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
               {lan.bar_main || "Main"}</li>
           </button>
           <button onClick={() => {
-  navigation("aboutUs");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+            navigation("aboutUs");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          >
             <li className={`cursor-pointer ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
               {lan.bar_about_us || "About Us"}</li>
           </button>
           <button onClick={() => {
-  navigation("contact");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}}
->
+            navigation("contact");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          >
             <li className={`cursor-pointer ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
               {lan.bar_contact_us || "Contact Us"}</li>
           </button>

@@ -123,7 +123,7 @@ export const MAIN_WEB = () => {
               duration-300 transform hover:scale-105 hover:bg-teal-600 hover:shadow-xl text-lg flex lg:hidden"
                 style={{ zIndex: 8752 }}
               >
-                Show Products
+                عرض المنتجات
               </Link>
 
               <a
