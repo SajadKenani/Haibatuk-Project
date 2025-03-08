@@ -9,6 +9,7 @@ import store from './store';
 import ABOUT from "./AboutUs"
 import { CONTACT } from './contact';
 import { Link } from 'react-router-dom';
+import storeImage from "./../website/assests/images/store.png"
 
 import { PhoneCall } from "lucide-react";
 import DETAILS from './store-details';
@@ -118,12 +119,13 @@ export const MAIN_WEB = () => {
             >
 
               <Link to={"/store"}
-                className="px-6 py-3 m-6 rounded text-white bg-teal-500 shadow-lg 
+                className="p-1 m-6 rounded text-white bg-teal-500 shadow-lg 
               border-2 border-teal-600 cursor-pointer transition-transform 
-              duration-300 transform hover:scale-105 hover:bg-teal-600 hover:shadow-xl text-lg flex lg:hidden"
-                style={{ zIndex: 8752 }}
+              duration-300 transform hover:scale-105 hover:bg-teal-600 
+              hover:shadow-xl text-lg flex lg:hidden p-2"
+                style={{ zIndex: 8752, backgroundColor: "#39B6BD" }}
               >
-                عرض المنتجات
+                <img className='w-10' src={storeImage} />
               </Link>
 
               <a

@@ -215,7 +215,7 @@ export const BAR: React.FC = () => {
           shadow-md py-20 mobile-menu ${isMenuOpen ? "open" : ""}`}
       >
         
-        <ul className="flex flex-col items-center space-y-4">
+        <ul className="flex flex-col items-center gap-3">
         <button onClick={() => {
             navigation("");
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -254,12 +254,12 @@ export const BAR: React.FC = () => {
               )}
             </button>
         
-            <li className="cursor-pointer py-4 mx-4 text-white"
+            <li className="cursor-pointer text-white mb-12"
               style={{ width: "180px", height: "10px" }} >
               <FormControl fullWidth>
                 <InputLabel style={{
                   fontFamily: "Tajawal", backgroundColor: "white",
-                  marginTop: "-8px", borderColor: "white"
+                   borderColor: "white"
                 }} id="dropdown-label"></InputLabel>
                 <Select
                   labelId="dropdown-label"
@@ -298,6 +298,20 @@ export const BAR: React.FC = () => {
           >
            {lan.btn_show_products}
           </a> */}
+
+          <a
+            className="border px-4 py-2 mx-4 rounded text-gray-800 cursor-pointer 
+            border-2 transition-all duration-300 transform hover:scale-105
+            hover:bg-teal-500 text-teal-500 hover:text-white"
+            style={{ borderColor: "#39B6BD" }}
+            onClick={() => {
+              navigation("store");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+           {lan.btn_show_products}
+          </a>
+
         </ul>
       </div>
     </div>
