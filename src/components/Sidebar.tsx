@@ -110,7 +110,7 @@ export const Sidebar = ({ data }: SidebarProps) => {
                 <div className="flex items-center space-x-3">
                     <Filter style={{color: "rgb(57, 182, 189)"}} size={24} />
                     <h2 className="text-2xl font-bold text-gray-800">
-                        {lang === "arabic" ? "المتجر" : "Store"}
+                        {lang === "arabic" ? "منتجاتنا" : "Our Products"}
                     </h2>
                 </div>
                 <button
