@@ -10,10 +10,10 @@
     "english_para": "English",
     "arabic_para": "Arabic",
 
-    "main_title_upper": "Professional-grade products",
+    "main_title_upper": "",
     "main_title_company_name": "Haibatuk Company",
     "main_title_lower": "For General and Limited Trade",
-    "main_title_description": "Our goal is to be part of your journey towards a healthy and comfortable life. At Haibatuk, we don't just offer products; we provide experiences designed to meet your needs and desires, and we are constantly working on developing products that meet safety and health standards.",
+    "main_title_description": "At Haibatuk, we pride ourselves on the fact that our products are manufactured under our full supervision to ensure the highest quality standards at every stage. Through our ongoing investment in supporting and developing our staff, we are committed to providing opportunities for personal and professional development, believing in the importance of youth and talent.",
     "contact_us_button": "Contact Us",
     "learn_more_button": "Learn More",
 
@@ -35,7 +35,7 @@
     "footer_privacy_policy": "Privacy Policy",
     "footer_all_rights_reserved": "All Rights Reserved.",
     "made_by": "Made by",
-    "footer_description": "Your health, our priority",
+    "footer_description": "High quality, our priority",
     "footer_navigation": "Quick Links",
     "footer_main": "Main",
     "footer_contact": "Contact Us",
@@ -43,6 +43,6 @@
     "footer_product_1": "Cleaning Products",
     "footer_product_2": "Perfume Products",
     "footer_product_3": "Paper Products",
-    "footer_hours": "Sat - Thu, 9 AM - 5 PM"
+    "footer_hours": "Sat - Thu, 9 AM - 2 PM"
     
 }
