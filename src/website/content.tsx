@@ -3,9 +3,9 @@ import { RootState } from "./store";
 
 import background from "./assests/images/main_background.png";
 import girl from "./assests/images/girl.png";
-import prize from "./assests/images/prize.png";
-import costumers from "./assests/images/costumers.png";
-import group from "./assests/images/group.png";
+
+
+
 import about from "./assests/images/about.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 
@@ -18,7 +18,7 @@ import 'aos/dist/aos.css'
 import corner from "./assests/images/corner.png"
 import darkCorner from "./assests/images/cornerDark.png"
 import { useEffect, useState } from "react";
-import CountUp from "react-countup";
+
 import contact from "./assests/images/contact.png"
 import arabic from "./arabic.json";
 import english from "./english.json";
