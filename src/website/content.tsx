@@ -248,8 +248,7 @@ export const CONTENT = () => {
 
       {/* --------------------------------  Bar Section -------------------------------- */}
 
-
-      <div className="flex justify-center " style={{ zIndex: 10 }}>
+     <div className="flex justify-center " style={{ zIndex: 10 }}>
         <div
           className="lg:flex justify-center items-center space-y-12 lg:space-y-4 lg:space-x-12 lg:flex-row"
           style={{
@@ -257,154 +256,14 @@ export const CONTENT = () => {
             backgroundColor: "#39B6BD",
             borderRadius: "100px",
             zIndex: 10,
-            padding: "43px 0 43px 0",
+            padding: "20px 0 20px 0",
           }}
         >
-          {/* First Section */}
-          {lang === "arabic" ? (
-            <div className="flex items-center justify-center space-x-4 mt-4 fadeInLeft">
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "right", fontSize: "30px" }}
-                >
-                  +<CountUp start={0} end={567} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "right" }}>
-                  عميل سعيد
-                </p>
-              </div>
-              <img
-                src={costumers}
-                alt="Customers"
-                className="w-14 h-12 object-cover"
-              />
-            </div>
-          ) : (
-            <div className="flex items-center justify-center space-x-4 mt-4 fadeInLeft">
-              <img
-                src={costumers}
-                alt="Customers"
-                className="w-14 h-12 object-cover"
-              />
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "left", fontSize: "30px" }}
-                >
-                  +<CountUp start={0} end={567} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "left" }}>
-                  Happy Customers
-                </p>
-              </div>
-            </div>
-          )}
 
-          {/* Vertical Line (Hidden on Mobile) */}
-          <div
-            style={{
-              borderLeft: "2px solid white",
-              height: "100%",
-              margin: "0 20px 0 60px",
-            }}
-            className="hidden lg:block"
-          ></div>
+          <h1 className="text-white font-bold text-xl"> {lan.footer_description} </h1>
 
-          {/* Second Section */}
-          {lang === "arabic" ? (
-            <div className="flex items-center justify-center space-x-4 fadeInUp">
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "right", fontSize: "30px" }}
-                >
-                  <CountUp start={0} end={26} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "right" }}>
-                  أعضاء الفريق
-                </p>
-              </div>
-              <img
-                src={group}
-                alt="Team Members"
-                className="w-14 h-12 object-cover"
-              />
-            </div>
-          ) : (
-            <div className="flex items-center justify-center space-x-4 fadeInUp">
-              <img
-                src={group}
-                alt="Team Members"
-                className="w-14 h-12 object-cover"
-              />
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "left", fontSize: "30px" }}
-                >
-                  <CountUp start={0} end={26} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "left" }}>
-                  Team Members
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Vertical Line (Hidden on Mobile) */}
-          <div
-            style={{
-              borderLeft: "2px solid white",
-              height: "100%",
-              margin: "0 20px 0 60px",
-            }}
-            className="hidden lg:block"
-          ></div>
-
-          {/* Third Section */}
-          {lang === "arabic" ? (
-            <div className="flex items-center justify-center space-x-4 fadeInRight">
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "right", fontSize: "30px" }}
-                >
-                  <CountUp start={0} end={26} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "right" }}>
-                  الجوائز المكتسبة
-                </p>
-              </div>
-              <img
-                src={prize}
-                alt="Prizes"
-                className="w-14 h-12 object-cover"
-              />
-            </div>
-          ) : (
-            <div className="flex items-center justify-center space-x-4 fadeInRight">
-              <img
-                src={prize}
-                alt="Prizes"
-                className="w-14 h-12 object-cover"
-              />
-              <div style={{ width: "120px" }}>
-                <p
-                  className="text-lg text-white"
-                  style={{ textAlign: "left", fontSize: "30px" }}
-                >
-                  <CountUp start={0} end={26} duration={5} />
-                </p>
-                <p className="text-sm text-white" style={{ textAlign: "left" }}>
-                  Awards Won
-                </p>
-              </div>
-            </div>
-          )}
         </div>
       </div>
-
       {/* --------------------------------  About Us Section -------------------------------- */}
 
       <div
