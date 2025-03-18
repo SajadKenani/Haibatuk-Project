@@ -196,15 +196,15 @@ export default function About() {
 
 
       {/* About Section */}
-      <section className={`py-24 relative overflow-hidden`}>
+          <section className={`py-4 pb-28 relative overflow-hidden ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-6 lg:px-40">
-          <div className="flex flex-col md:flex-row items-center gap-16">
-            <div className="md:w-1/2 space-y-6">
-              <h2 className={`text-4xl font-bold  ${theme === 'light' ? 'text-gray-800' : 'text-gray-50'}`}>{t.about.title}</h2>
-              <p className={`${theme === 'light' ? 'text-gray-600' : 'text-gray-300'} text-lg`}>
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="md:w-full ">
+              {/* <h2 className={`text-4xl font-bold  ${theme === 'light' ? 'text-gray-800' : 'text-gray-50'}`}>{t.about.title}</h2> */}
+              {/* <p className={`${theme === 'light' ? 'text-gray-600' : 'text-gray-300'} text-lg`}>
                 {t.about.description}
-              </p>
-              <div className="grid grid-cols-2 gap-6 mt-8">
+              </p> */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
                 {t.about.features.map((item: { icon: any; text: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }, index: React.Key | null | undefined) => (
                   <div key={index} className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-teal-500/10 rounded-full flex items-center justify-center">
@@ -215,12 +215,12 @@ export default function About() {
                 ))}
               </div>
             </div>
-            <div className="md:w-1/2">
+            {/* <div className="md:w-1/2">
               <div className="relative">
                 <div className="absolute -inset-4 bg-teal-500/10 rounded-2xl transform -rotate-6"></div>
                 <img src="https://media.licdn.com/dms/image/v2/D5612AQEUvTYvVXsxiA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1713226528438?e=2147483647&v=beta&t=HmfpU1BKPD0MXfNLV8wcXPPm2nY4RDdwN_UUYaI1NNQ" alt="About Haibatuk" className="relative rounded-2xl shadow-xl" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
