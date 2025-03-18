@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "./store";
 import { Content, Language } from '../types';
 import HaibatukSimplePage from './AcoutUsPara';
-
+import aboutImage from "./assests/images/aboutUmage.png"
 
 // Define the structure of the content object with keys for English and Arabic
 const content: { [key in Language]: Content } = {
@@ -153,7 +153,7 @@ export default function About() {
               </div>
             </div>
             <div className="md:w-1/2 transform hover:scale-105 transition-all duration-500">
-              <img src="https://media.licdn.com/dms/image/v2/D5612AQEUvTYvVXsxiA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1713226528438?e=2147483647&v=beta&t=HmfpU1BKPD0MXfNLV8wcXPPm2nY4RDdwN_UUYaI1NNQ" alt="Haibatuk Products" className="rounded-2xl shadow-2xl" />
+              <img src={aboutImage} alt="Haibatuk Products" className="rounded-2xl shadow-2xl" />
             </div>
           </div>
         </div>
