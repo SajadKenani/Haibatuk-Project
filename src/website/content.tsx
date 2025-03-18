@@ -600,9 +600,9 @@ export const CONTENT = () => {
                      <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
                   
                   {lang === "arabic" ?
-                   <span className="text-right">فروعنا: البصرة وميسان والنجف الاشرف وكربلاء المقدسة وبابل</span>
+                   <span className="text-right"> فروعنا: واسط والبصرة والمثنى وميسان والنجف وكربلاء وبغداد وبابل </span>
                    :
-                   <span className="text-left"> Our branches: Basra, Maysan, Najaf Al-Ashraf, Karbala Al-Muqaddasa, and Babylon. </span>
+                   <span className="text-left"> Our branches: Wasit, Basra, Muthanna, Maysan, Najaf, Karbala, Baghdad, and Babylon. </span>
                   }
                  
                 </li>
