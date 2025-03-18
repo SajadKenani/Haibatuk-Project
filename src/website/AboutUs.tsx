@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "./store";
 import { Content, Language } from '../types';
 import HaibatukSimplePage from './AcoutUsPara';
-import aboutImage from "./assests/images/aboutUmage.png"
-
+import aboutImage from "./assests/images/aboutImage.jpg"
 // Define the structure of the content object with keys for English and Arabic
 const content: { [key in Language]: Content } = {
   english: {
