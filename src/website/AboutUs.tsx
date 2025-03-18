@@ -10,8 +10,8 @@ const content: { [key in Language]: Content } = {
   english: {
     since: "Since 2008",
     hero: {
-      title: "Enhancing Well-being Through Quality",
-      description: "Pioneer in health products, offering high-quality brands that meet community needs while adhering to global standards."
+      title: "We take pride in Hebtec Company.",
+      description: "That our own products are manufactured under our full supervision to ensure the highest quality standards at every stage."
     },
     buttons: {
       products: "Our Products",
@@ -64,8 +64,8 @@ const content: { [key in Language]: Content } = {
   arabic: {
     since: "منذ 2008",
     hero: {
-      title: "تعزيز الرفاهية من خلال الجودة",
-      description: "رائدة في المنتجات الصحية، نقدم علامات تجارية عالية الجودة تلبي احتياجات المجتمع مع الالتزام بالمعايير العالمية."
+      title: "نفتخر في شركة هيبتك",
+      description: "بأن منتجاتنا  الخاصة بنا  مصنعة تحت إشرافنا الكامل لضمان أعلى معايير الجودة في كل مرحلة"
     },
     buttons: {
       products: "منتجاتنا",
