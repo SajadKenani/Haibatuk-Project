@@ -577,7 +577,7 @@ export const CONTENT = () => {
               <ul className="list-none space-y-4">
                 <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
                   <FaMapMarkerAlt className="text-[#39B6BD] text-2xl " />
-                  <span>{lang === "arabic" ? "العراق، بغداد" : "Iraq, Baghdad"}</span>
+                  <span>{lang === "arabic" ? "لعراق / ذي قار / الناصرية" : "Iraq / Dhi Qar / Al-Nasiriyah"}</span>
                 </li>
                 <li className={`flex items-center gap-4 text-lg ${lan === arabic && "lg:flex-row-reverse lg:mr-16"}`}>
                   <FaPhone className="text-[#39B6BD] text-2xl" />
