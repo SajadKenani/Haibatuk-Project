@@ -173,7 +173,8 @@ export const CONTENT = () => {
                       {lan.learn_more_button}
                     </button>
 
-                    <button
+                     <Link
+                      to="contact-us" smooth={true} duration={0}
                       className="border px-4 py-2 rounded text-gray-800 cursor-pointer 
                       border-2 transition-all hover:bg-gray-200"
                       style={{
@@ -183,7 +184,7 @@ export const CONTENT = () => {
                       }}
                     >
                       {lan.contact_us_button}
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </>
