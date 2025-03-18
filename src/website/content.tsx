@@ -6,7 +6,7 @@ import girl from "./assests/images/girl.png";
 
 
 
-import about from "./assests/images/about.png";
+import about from "./assests/images/logo.png";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 
 import house from "./assests/images/house.png";
@@ -266,13 +266,16 @@ export const CONTENT = () => {
       </div>
       {/* --------------------------------  About Us Section -------------------------------- */}
 
+      
       <div
-        className="flex flex-col md:flex-row justify-center items-center gap-10 mt-44 p-4"
+        className="flex flex-col md:flex-row justify-center gap-10 mt-44 p-4"
         id="about-us"
         data-aos="fade-up"
       >
-        {/* Text Content */}
-        <div
+        {lang === "arabic" ? 
+        <>
+               {/* Text Content */}
+               <div
           className="max-w-lg"
           style={{ textAlign: textDirection }}
           data-aos="fade-right"
@@ -294,31 +297,6 @@ export const CONTENT = () => {
           >
             {lan.estableshemnt}
           </p>
-{/* 
-          {lang === 'arabic' ? (
-            <div
-              className="flex items-right justify-end gap-2 mb-4"
-              style={{ textAlign: textDirection }}
-              data-aos="fade-left"
-            >
-              <img src={prize_logo} alt="Prize Logo" className="w-6 h-6" />
-              <p className={theme === "dark" ? "text-white" : "text-black"}>شركة حائزة على جوائز</p>
-            </div>
-          ) : (
-            <div
-              className="flex items-right justify-start gap-2 mb-4"
-              style={{ textAlign: textDirection }}
-              data-aos="fade-right"
-            >
-              <p className={theme === "dark" ? "text-white" : "text-black"}>Award-Winning Company</p>
-              <img
-                src={prize_logo}
-                style={{ textAlign: textDirection }}
-                alt="Prize Logo"
-                className="w-6 h-6"
-              />
-            </div>
-          )} */}
 
           <p
             className={`mb-6 leading-relaxed -mt-2 ${theme === "dark" ? "text-white" : "text-black"}`}
@@ -341,12 +319,68 @@ export const CONTENT = () => {
         <img
           src={about}
           alt="About Hebtec"
-          className="w-full max-w-md rounded"
-          style={{ width: '100%' }}
+          className="w-20 h-20 rounded"
+          style={{top: 0}}
           data-aos="fade-up"
         />
+        </>
+        :
+        <>
+        
+        {/* Image */}
+        <img
+          src={about}
+          alt="About Hebtec"
+          className="w-20 h-20 rounded"
+          style={{top: 0}}
+          data-aos="fade-up"
+        />
+               {/* Text Content */}
+               <div
+          className="max-w-lg"
+          style={{ textAlign: textDirection }}
+          data-aos="fade-right"
+        >
+          <p style={{ textAlign: textDirection, color: '#39B6BD' }}>
+            {lan.bar_about_us}
+          </p>
+          <p
+            className={`font-bold text-xl mb-2  ${theme === "dark" ? "text-white" : "text-black"}`}
+            style={{ textAlign: textDirection }}
+            data-aos="fade-left"
+          >
+            {lan.award_winning}
+          </p>
+          <p
+            className={`mb-4 leading-relaxed mb-10 ${theme === "dark" ? "text-white" : "text-black"}`}
+            style={{ textAlign: textDirection }}
+            data-aos="fade-up"
+          >
+            {lan.estableshemnt}
+          </p>
+
+          <p
+            className={`mb-6 leading-relaxed -mt-2 ${theme === "dark" ? "text-white" : "text-black"}`}
+            style={{ textAlign: textDirection }}
+            data-aos="fade-up"
+          >
+            {lan.company_offers}
+          </p>
+          <button
+            onClick={() => navigate("aboutUs")}
+            className="border px-4 py-2 rounded text-gray-800 cursor-pointer 
+                      border-2 transition-all hover:bg-gray-200"
+            style={{ borderColor: "#39B6BD", color: "#39B6BD" }}
+          >
+            {lan.learn_more_button}
+          </button>
+        </div>
+</>
+        }
+ 
       </div>
 
+      
       {/* --------------------------------  Offer Section -------------------------------- */}
 
       <div>
