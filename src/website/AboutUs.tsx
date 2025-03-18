@@ -146,9 +146,9 @@ export default function About() {
                 {t.hero.description}
               </p>
               <div className="flex gap-4">
-                <button className={`${theme === "dark" ? "bg-white text-teal-900" : "bg-black text-teal-200"}  px-8 py-4 rounded-lg font-semibold hover:bg-teal-50 transition-all transform hover:scale-105`}>
+{/*                 <button className={`${theme === "dark" ? "bg-white text-teal-900" : "bg-black text-teal-200"}  px-8 py-4 rounded-lg font-semibold hover:bg-teal-50 transition-all transform hover:scale-105`}>
                   {t.buttons.products} <i className={`fa fa-arrow-${lang === 'arabic' ? 'left' : 'right'} ml-2`}></i>
-                </button>
+                </button> */}
             
               </div>
             </div>
