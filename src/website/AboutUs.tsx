@@ -10,7 +10,7 @@ const content: { [key in Language]: Content } = {
   english: {
     since: "Since 2008",
     hero: {
-      title: "We take pride in Hebtec Company.",
+      title: "We take pride in Haibatuk Company.",
       description: "That our own products are manufactured under our full supervision to ensure the highest quality standards at every stage."
     },
     buttons: {
