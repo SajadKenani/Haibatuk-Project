@@ -66,7 +66,7 @@ export const STORE: React.FC = () => {
         >
           <Menu size={24} />
         </button>
-        <h1 className="text-xl font-bold">{lang === "english" ? "Store" : "المتجر"}</h1>
+        <h1 className="text-xl font-bold">{lang === "english" ? "Our Products" : "منتجاتنا"}</h1>
         <div className="relative">
           <Search size={20} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
