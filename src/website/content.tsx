@@ -141,7 +141,7 @@ export const CONTENT = () => {
               <>
                 <img
                   src={girl}
-                  style={{ width: "350px", zIndex: 1 }}
+                  style={{ width: "500px", zIndex: 1 }}
                   className="mt-20 hidden lg:block fadeInLeft"
                   alt="Girl"
                 />
@@ -235,7 +235,7 @@ export const CONTENT = () => {
 
                 <img
                   src={girl}
-                  style={{ width: "350px", zIndex: 1 }}
+                  style={{ width: "500px", zIndex: 1 }}
                   className="mt-20 hidden lg:block fadeInLeft"
                   alt="Girl"
                 />
