@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
 import background from "./assests/images/main_background.png";
-import girl from "./assests/images/girl.jpg";
+import girl from "./assests/images/girl.png";
 
 
 
