@@ -21,10 +21,46 @@ export const ADD: React.FC = () => {
   const [nestedSubDept, setNestedSubDept] = useState<NestedSubDepartment[]>([]);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [activeSection, setActiveSection] = useState<'english' | 'arabic'>('english');
+  const [isCompressing, setIsCompressing] = useState(false);
 
   useEffect(() => {
     fetchDepartments();
   }, []);
+
+  // Image compression function
+  const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.8): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+
+      img.onload = () => {
+        // Calculate new dimensions while maintaining aspect ratio
+        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+        const newWidth = img.width * ratio;
+        const newHeight = img.height * ratio;
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Draw and compress the image
+        ctx?.drawImage(img, 0, 0, newWidth, newHeight);
+        
+        // Convert to base64 with compression
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedDataUrl);
+      };
+
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  // Compress multiple images
+  const compressMultipleImages = async (files: File[], maxWidth: number = 800, quality: number = 0.8): Promise<string[]> => {
+    const compressionPromises = files.map(file => compressImage(file, maxWidth, quality));
+    return Promise.all(compressionPromises);
+  };
 
   const handleInputChange = (name: string,
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,25 +76,37 @@ export const ADD: React.FC = () => {
     setError("");
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Image size should be less than 5MB");
-        return;
-      }
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = String(reader.result);
-        setData(prev => ({ ...prev, image: result }));
-        setImagePreview(result);
-        setError("");
-      };
-      reader.onerror = () => {
-        setError("Error reading the image.");
-      };
-      reader.readAsDataURL(file);
+    if (file.size > 10 * 1024 * 1024) { // Increased to 10MB since we'll compress
+      setError("Image size should be less than 10MB");
+      return;
+    }
+
+    setIsCompressing(true);
+    setError("");
+
+    try {
+      // Compress the image
+      const compressedImage = await compressImage(file, 800, 0.8);
+      
+      // Check compressed size (rough estimate)
+      const compressedSizeKB = Math.round((compressedImage.length * 3) / 4 / 1024);
+      console.log(`Original size: ${Math.round(file.size / 1024)}KB, Compressed size: ~${compressedSizeKB}KB`);
+
+      setData(prev => ({ ...prev, image: compressedImage }));
+      setImagePreview(compressedImage);
+      setSuccess(`Image compressed successfully! Size reduced to ~${compressedSizeKB}KB`);
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (error) {
+      setError("Error compressing the image. Please try again.");
+      console.error("Compression error:", error);
+    } finally {
+      setIsCompressing(false);
     }
   };
 
@@ -87,9 +135,7 @@ export const ADD: React.FC = () => {
     return true;
   };
 
-  const sendProduct = async (event: React.FormEvent) => {
-    event.preventDefault();
-
+  const sendProduct = async () => {
     if (!validateForm()) return;
     if (!validateBase64Image(data.image)) {
       setError("Invalid image format. Please upload a valid image.");
@@ -146,25 +192,34 @@ export const ADD: React.FC = () => {
     } catch (error) { setError("Error fetching nestedsub-departments") }
   }
 
-  const handleMultipleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMultipleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const imageArrayPromises = files.map(
-      (file) =>
-        new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = () => reject("Error reading image file.");
-          reader.readAsDataURL(file);
-        })
-    );
+    if (files.length === 0) return;
 
-    Promise.all(imageArrayPromises)
-      .then((images) => {
-        setData((prev) => ({ ...prev, more_images_id: images }));
-      })
-      .catch(() => setError("Error reading one or more image files."));
+    setIsCompressing(true);
+    setError("");
+
+    try {
+      // Compress all images
+      const compressedImages = await compressMultipleImages(files, 800, 0.8);
+      
+      // Calculate total compressed size estimate
+      const totalCompressedSizeKB = compressedImages.reduce((total, img) => {
+        return total + Math.round((img.length * 3) / 4 / 1024);
+      }, 0);
+
+      setData((prev) => ({ ...prev, more_images_id: compressedImages }));
+      setSuccess(`${files.length} images compressed successfully! Total size: ~${totalCompressedSizeKB}KB`);
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (error) {
+      setError("Error compressing one or more images. Please try again.");
+      console.error("Multiple image compression error:", error);
+    } finally {
+      setIsCompressing(false);
+    }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white py-12 px-4 sm:px-6 lg:px-8">
@@ -175,6 +230,7 @@ export const ADD: React.FC = () => {
           <h2 className="text-4xl font-bold text-white mb-4">Add New Product</h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Complete the form below to add a new product to your inventory. All fields marked with * are required.
+            Images will be automatically compressed to optimize file size.
           </p>
         </div>
 
@@ -190,6 +246,14 @@ export const ADD: React.FC = () => {
           <div className="mb-6 flex items-center gap-2 bg-green-900/50 text-green-200 p-4 rounded-lg">
             <CheckCircle className="h-5 w-5 flex-shrink-0" />
             <p>{success}</p>
+          </div>
+        )}
+
+        {/* Compression Indicator */}
+        {isCompressing && (
+          <div className="mb-6 flex items-center gap-2 bg-blue-900/50 text-blue-200 p-4 rounded-lg">
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-300 border-t-transparent"></div>
+            <p>Compressing images... Please wait.</p>
           </div>
         )}
 
@@ -216,7 +280,7 @@ export const ADD: React.FC = () => {
             </button>
           </div>
 
-          <form onSubmit={sendProduct} className="p-6 lg:p-8 space-y-8">
+          <div className="p-6 lg:p-8 space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Left Column */}
               <div className="space-y-6">
@@ -354,7 +418,7 @@ export const ADD: React.FC = () => {
                 <div className="space-y-4">
                   <FileInput
                     id="image"
-                    label="Upload Product Image *"
+                    label="Upload Product Image * (Auto-compressed)"
                     onChange={handleFileChange}
                   />
 
@@ -371,26 +435,41 @@ export const ADD: React.FC = () => {
                     </div>
                   )}
 
-                  {!data.more_images_id ?
-                    <h1> The images were uploaded! </h1>
-
-                    :
+                  {!data.more_images_id || data.more_images_id.length === 0 || data.more_images_id[0] === "" ? (
                     <div className="form-group">
-                      <label className="block text-sm font-medium text-gray-200 text-gray-300 mb-2">
-                        Upload More Images
+                      <label className="block text-sm font-medium text-gray-200 mb-2">
+                        Upload More Images (Auto-compressed)
                       </label>
                       <input
                         type="file"
                         accept="image/*"
-                        className="w-full p-3 border border-gray-300 border-gray-600 rounded-lg 
+                        className="w-full p-3 border border-gray-600 rounded-lg 
                         shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-700 text-white 
                         focus:ring-purple-500 focus:border-purple-500"
                         multiple
                         onChange={handleMultipleFilesChange}
+                        disabled={isCompressing}
                       />
+                      {data.more_images_id && data.more_images_id.length > 1 && (
+                        <p className="text-green-400 text-sm mt-2">
+                          {data.more_images_id.length} additional images uploaded and compressed
+                        </p>
+                      )}
                     </div>
-                  }
-
+                  ) : (
+                    <div className="bg-green-900/30 border border-green-600 rounded-lg p-4">
+                      <p className="text-green-300 text-sm font-medium">
+                        ✓ {data.more_images_id.length} additional images uploaded and compressed successfully!
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setData(prev => ({ ...prev, more_images_id: [""] }))}
+                        className="text-blue-400 hover:text-blue-300 text-sm mt-2 underline"
+                      >
+                        Upload different images
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -398,21 +477,22 @@ export const ADD: React.FC = () => {
             {/* Submit Button */}
             <div className="flex justify-end pt-6 border-t border-gray-700">
               <button
-                type="submit"
-                disabled={isSubmitting}
+                type="button"
+                onClick={sendProduct}
+                disabled={isSubmitting || isCompressing}
                 className={`
                   flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium
-                  ${isSubmitting
+                  ${isSubmitting || isCompressing
                     ? 'bg-blue-800 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'}
                   transition-colors duration-200
                 `}
               >
                 <Upload className="h-5 w-5" />
-                {isSubmitting ? "Submitting..." : "Submit Product"}
+                {isSubmitting ? "Submitting..." : isCompressing ? "Compressing..." : "Submit Product"}
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
