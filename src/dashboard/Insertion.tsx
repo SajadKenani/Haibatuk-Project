@@ -23,6 +23,7 @@ export const ADD: React.FC = () => {
   const [activeSection, setActiveSection] = useState<'english' | 'arabic'>('english');
   const [isCompressing, setIsCompressing] = useState(false);
 
+  
   useEffect(() => {
     fetchDepartments();
   }, []);
@@ -498,5 +499,6 @@ export const ADD: React.FC = () => {
     </div>
   );
 };
+
 
 export default ADD;
